@@ -23,7 +23,7 @@ export default function FooterSection() {
           _hover={{ color: "teal.700", textDecoration: "underline" }}
         >
           <Icon as={FaEnvelope} boxSize={6} mr={2} />
-          sharemyride9@gmail.com
+          officialtesting@gmail.com
         </Link>
 
         <Link
@@ -34,16 +34,6 @@ export default function FooterSection() {
         >
           <Icon as={FaGithub} boxSize={6} mr={2} />
           github.com/your-github
-        </Link>
-
-        <Link
-          href="https://linkedin.com/in/your-linkedin"
-          isExternal
-          color="teal.500"
-          _hover={{ color: "teal.700", textDecoration: "underline" }}
-        >
-          <Icon as={FaLinkedin} boxSize={6} mr={2} />
-          linkedin.com/in/your-linkedin
         </Link>
       </Stack>
 
