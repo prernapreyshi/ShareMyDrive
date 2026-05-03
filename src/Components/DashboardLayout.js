@@ -60,7 +60,7 @@ const DashboardLayout = ({ children, userInfo, userType = "driver" }) => {
       >
         <VStack align="start" spacing={4}>
           <Text fontSize="2xl" fontWeight="bold" mb={4}>
-            ShareMyRide
+            ShareMyDrive
           </Text>
 
           <SidebarItem
