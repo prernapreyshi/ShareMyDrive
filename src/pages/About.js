@@ -57,8 +57,8 @@ const About = () => {
   const sections = [
     {
       icon: FaRoute,
-      title: "Why ShareMyRide?",
-      text: "ShareMyRide was born to simplify travel, reduce traffic, and encourage smart carpooling. Whether you're commuting daily or going on a road trip, we help you find the right match to share your journey.",
+      title: "Why ShareMyDrive?",
+      text: "ShareMyDrive was born to simplify travel, reduce traffic, and encourage smart carpooling. Whether you're commuting daily or going on a road trip, we help you find the right match to share your journey.",
       highlight: "Smart. Social. Sustainable.",
       color: "blue.600",
       image: ShareImage,
