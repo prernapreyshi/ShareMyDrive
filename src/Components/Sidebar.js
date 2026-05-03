@@ -46,7 +46,7 @@ const Sidebar = () => {
     >
       <VStack align="start" spacing={6}>
         <Text fontSize="2xl" fontWeight="bold" color="blue.500">
-          ShareMyRide
+          ShareMyDrive
         </Text>
 
         {navItems.map((item) => (
