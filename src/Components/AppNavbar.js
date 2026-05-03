@@ -29,7 +29,7 @@ const AppNavbar = () => {
       <Flex h={16} alignItems="center" justifyContent="space-between">
         <HStack spacing={10}>
           <Text fontWeight="bold" fontSize="xl" color="brand.400">
-            ShareMyRide
+            ShareMyDrive
           </Text>
           <HStack spacing={6} fontWeight="medium">
             <Link to="/">
