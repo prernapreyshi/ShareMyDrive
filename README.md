@@ -1,4 +1,4 @@
-# ShareMyRide - Carpooling Made Easy
+# ShareMydrive - Carpooling Made Easy
 
 **ShareMyRide** is a carpooling platform designed to connect drivers and passengers for a more sustainable and cost-effective travel experience. Whether you're commuting to work, traveling long distances, or looking to share a ride to a specific event, ShareMyRide helps you find the perfect carpooling option based on your location and schedule.
 
@@ -20,4 +20,4 @@
 ## Instructions for Use:
 1. Clone this repository to your local machine:
    ```bash
-   git clone https://github.com/prernapreyshi/ShareMyRide.git
+   https://github.com/prernapreyshi/ShareMyDrive
