@@ -10,7 +10,6 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 
-// Motion-enabled Chakra components
 const MotionBox = motion(Box);
 const MotionButton = motion(Button);
 const MotionImage = motion(Image);
@@ -60,8 +59,6 @@ const HeroSection = () => {
             Get Started
           </MotionButton>
         </MotionBox>
-
-        {/* Right Image Section with slide-from-right */}
         <MotionBox
           flex="1"
           initial={{ x: 50, opacity: 0 }}
