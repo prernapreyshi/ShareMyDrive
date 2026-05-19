@@ -40,7 +40,6 @@ const DashboardLayout = ({ children, userInfo, userType = "driver" }) => {
   const location = useLocation();
   const bg = useColorModeValue("gray.100", "gray.800");
   const isDriver = userType === "driver";
-
   const handleLogout = async () => {
     await signOut(auth);
     navigate("/login");
@@ -114,5 +113,4 @@ const DashboardLayout = ({ children, userInfo, userType = "driver" }) => {
     </Flex>
   );
 };
-
 export default DashboardLayout;
