@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 
-// Motion wrappers
+// Motion Wrappers
 const MotionBox = motion(Box);
 const MotionButton = motion(Button);
 
@@ -56,5 +56,4 @@ const RideSearchForm = () => {
     </MotionBox>
   );
 };
-
 export default RideSearchForm;
