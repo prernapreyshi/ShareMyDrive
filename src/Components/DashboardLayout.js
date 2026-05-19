@@ -47,7 +47,6 @@ const DashboardLayout = ({ children, userInfo, userType = "driver" }) => {
   };
 
   const currentPath = location.pathname;
-
   return (
     <Flex minH="100vh">
       {/* Sidebar */}
@@ -62,7 +61,6 @@ const DashboardLayout = ({ children, userInfo, userType = "driver" }) => {
           <Text fontSize="2xl" fontWeight="bold" mb={4}>
             ShareMyDrive
           </Text>
-
           <SidebarItem
             icon={<FiHome />}
             label="Home"
