@@ -17,7 +17,7 @@ const ContactForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    sendEmail(formData, 'template_4ypwa9f') // 👈 Your template ID here
+    sendEmail(formData, 'template_4ypwa9f') //  Your template ID here
       .then(() => {
         alert('Email sent!');
       })
