@@ -24,14 +24,8 @@ const googleProvider = new GoogleAuthProvider();
 if (typeof window !== "undefined") {
   getAnalytics(app);
 
-  if (window.location.hostname === "localhost") {
-    try {
-      auth.settings.appVerificationDisabledForTesting = true;
-      console.log("⚠️ reCAPTCHA is disabled for testing on localhost.");
-    } catch (e) {
-      console.warn("Couldn't disable reCAPTCHA for testing:", e);
-    }
-  }
+  if (typeof window !== "undefined") {
+  getAnalytics(app);
 }
 
 export { auth, db, storage, googleProvider };
