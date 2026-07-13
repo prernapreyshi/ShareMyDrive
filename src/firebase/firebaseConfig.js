@@ -23,9 +23,6 @@ const googleProvider = new GoogleAuthProvider();
 
 if (typeof window !== "undefined") {
   getAnalytics(app);
-
-  if (typeof window !== "undefined") {
-  getAnalytics(app);
 }
 
 export { auth, db, storage, googleProvider };
