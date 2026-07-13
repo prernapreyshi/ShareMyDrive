@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -12,16 +12,11 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useNavigate, Link } from "react-router-dom";
-import {
-  RecaptchaVerifier,
-  signInWithPhoneNumber,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebaseConfig";
 import { motion } from "framer-motion";
 
-// Framer Motion
 const MotionBox = motion(Box);
 const MotionInput = motion(Input);
 const MotionButton = motion(Button);
@@ -30,106 +25,40 @@ const MotionVStack = motion(VStack);
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [otp, setOtp] = useState("");
-  const [confirmationResult, setConfirmationResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const toast = useToast();
   const navigate = useNavigate();
 
-  const setUpRecaptcha = () => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: () => console.log("reCAPTCHA verified"),
-        },
-        auth
-      );
-      window.recaptchaVerifier.render().then((widgetId) => {
-        window.recaptchaWidgetId = widgetId;
-      });
-    }
-  };
-
-  const sendOtp = async () => {
-    if (!phone || phone.length < 10) {
+  const handleSignup = async () => {
+    if (!email || !password) {
       return toast({
-        title: "Invalid Phone",
-        description: "Please enter a valid phone number.",
+        title: "Missing fields",
+        description: "Please enter both email and password.",
         status: "warning",
         duration: 3000,
         isClosable: true,
       });
     }
 
-    try {
-      const formattedPhone = phone.startsWith("+") ? phone : `+91${phone}`;
-      let appVerifier;
-
-      if (window.location.hostname === "localhost") {
-        auth.settings.appVerificationDisabledForTesting = true;
-
-        class MockRecaptchaVerifier {
-          type = "recaptcha";
-          verify() {
-            return Promise.resolve("test-verification-code");
-          }
-          render() {
-            return Promise.resolve(0);
-          }
-          clear() {}
-          _reset() {}
-        }
-
-        appVerifier = new MockRecaptchaVerifier();
-      } else {
-        setUpRecaptcha();
-        appVerifier = window.recaptchaVerifier;
-      }
-
-      const result = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
-      setConfirmationResult(result);
-
-      toast({
-        title: "OTP Sent",
-        description: "Please check your phone.",
-        status: "info",
-        duration: 3000,
-        isClosable: true,
-      });
-    } catch (error) {
-      toast({
-        title: "OTP Failed",
-        description: error.message,
-        status: "error",
-        duration: 4000,
-        isClosable: true,
-      });
-    }
-  };
-
-  const verifyOtpAndSignup = async () => {
-    if (!confirmationResult || !otp) {
+    if (password.length < 6) {
       return toast({
-        title: "OTP Missing",
-        description: "Please enter the OTP.",
+        title: "Weak password",
+        description: "Password must be at least 6 characters.",
         status: "warning",
         duration: 3000,
         isClosable: true,
       });
     }
 
+    setLoading(true);
     try {
-      await confirmationResult.confirm(otp);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const uid = userCredential.user.uid;
 
       await setDoc(doc(db, "users", uid), {
         uid,
         email,
-        phone,
         createdAt: new Date(),
         role: null,
       });
@@ -145,23 +74,29 @@ const Signup = () => {
       navigate("/select-role");
     } catch (err) {
       toast({
-        title: "Verification Failed",
-        description: err.message,
+        title: "Signup Failed",
+        description: getFriendlyError(err.code),
         status: "error",
         duration: 3000,
         isClosable: true,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    return () => {
-      if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.clear?.();
-        window.recaptchaVerifier = null;
-      }
-    };
-  }, []);
+  const getFriendlyError = (code) => {
+    switch (code) {
+      case "auth/email-already-in-use":
+        return "This email is already registered. Try logging in.";
+      case "auth/invalid-email":
+        return "Invalid email address.";
+      case "auth/weak-password":
+        return "Password should be at least 6 characters.";
+      default:
+        return "An unexpected error occurred. Please try again.";
+    }
+  };
 
   return (
     <MotionBox
@@ -201,55 +136,17 @@ const Signup = () => {
           />
         </FormControl>
 
-        <FormControl isRequired>
-          <FormLabel>Mobile Number</FormLabel>
-          <MotionInput
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="+91XXXXXXXXXX"
-            whileFocus={{ scale: 1.03 }}
-          />
-        </FormControl>
-
-        {confirmationResult && (
-          <FormControl isRequired>
-            <FormLabel>Enter OTP</FormLabel>
-            <MotionInput
-              type="text"
-              value={otp}
-              onChange={(e) => setOtp(e.target.value)}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-              whileFocus={{ scale: 1.03 }}
-            />
-          </FormControl>
-        )}
-
-        {!confirmationResult ? (
-          <MotionButton
-            colorScheme="blue"
-            width="full"
-            onClick={sendOtp}
-            isDisabled={!phone}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Send OTP
-          </MotionButton>
-        ) : (
-          <MotionButton
-            colorScheme="green"
-            width="full"
-            onClick={verifyOtpAndSignup}
-            isDisabled={!otp || !email || !password}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Verify OTP & Sign Up
-          </MotionButton>
-        )}
+        <MotionButton
+          colorScheme="blue"
+          width="full"
+          onClick={handleSignup}
+          isDisabled={!email || !password}
+          isLoading={loading}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Sign Up
+        </MotionButton>
 
         <Text fontSize="sm" textAlign="center" mt={2}>
           Already have an account?{" "}
@@ -258,8 +155,6 @@ const Signup = () => {
           </Link>
         </Text>
       </MotionVStack>
-
-      <div id="recaptcha-container"></div>
     </MotionBox>
   );
 };
